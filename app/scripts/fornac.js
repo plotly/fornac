@@ -59,10 +59,8 @@ export function FornaContainer(element, passedOptions) {
             {
                 title: 'Add Node',
                 action: function(elm, d, i, mousePos) {
-                    console.log('mousePos:', mousePos, self.options.svgW, self.options.svgH);
                     let canvasMousePos = [xScale.invert(mousePos[0]),
                                           yScale.invert(mousePos[1])];
-                    console.log('canvasMousePos', canvasMousePos);
 
                     self.addRNA('.', {'sequence': 'A', 'centerPos': canvasMousePos});
 
@@ -204,7 +202,6 @@ export function FornaContainer(element, passedOptions) {
             if (self.options.layout == 'naview') {
                 var naview = new NAView();
 
-                console.log('rg.pairtable:', rg.pairtable);
                 let naViewPositions = naview.naview_xy_coordinates(rg.pairtable);
                 options.positions = []
                 for (let i = 0; i < naViewPositions.nbase; i++)
@@ -419,7 +416,9 @@ export function FornaContainer(element, passedOptions) {
     }
 
     function realLinkFilter(d) {
+        console.log('d.linkType:', d.linkType);
         return d.linkType == 'basepair' ||
+               d.linkType == 'intermolecule' ||
                d.linkType == 'backbone' ||
                d.linkType == 'pseudoknot' ||
                d.linkType == 'label_link' ||
@@ -1253,7 +1252,8 @@ export function FornaContainer(element, passedOptions) {
         .addPositions('label', labelPositions)
         .reinforceStems()
         .reinforceLoops()
-        .updateLinkUids();
+        .updateLinkUids()
+        .breakNodesToFakeNodes();
     };
 
     var removeLink = function(d) {
@@ -1311,8 +1311,7 @@ export function FornaContainer(element, passedOptions) {
         // to recalculate the structure and change the colors
         // appropriately
         //
-        console.log('adding new link', newLink.linkType);
-        if (newLink.source.rna == newLink.target.rna) {
+        if (newLink.linkType == 'basepair') {
             // must be a basepair
             let r = newLink.source.rna;
 
@@ -1322,12 +1321,10 @@ export function FornaContainer(element, passedOptions) {
             updateRnaGraph(r);
 
         } else {
-            if (newLink == 'basepair') {
-                //Add an extra link
-                console.log('intermolecule');
-                newLink.linkType = 'intermolecule';
+            console.log('here');
+            if (newLink.linkType == 'intermolecule') {
                 self.extraLinks.push(newLink);
-            } else if (newLink == 'backbone') {
+            } else if (newLink.linkType == 'backbone') {
                 //adding a backbone link so we have to create a new RNAgraph
             }
         }
@@ -1393,13 +1390,13 @@ export function FornaContainer(element, passedOptions) {
                     action: function(elm, d, i) {
                         linkContextMenuShown = false;
                         dragLine.attr('class', 'drag_line_hidden');
+                        newLink.linkType = 'intermolecule';
                         self.addLink(newLink);
                     }
                 }
             ]
                 linkContextMenuShown = true;
             let linkContextMenu = contextMenu(linkMenu);
-            console.log('newLinkMenu');
             linkContextMenu.apply(this, [d,i,true, 
                     function() { dragLine.attr('class', 'drag_line_hidden') }]);
         } else {
@@ -1657,7 +1654,6 @@ export function FornaContainer(element, passedOptions) {
         });
 
         var nucleotideNodes = gnodesEnter.filter(function(d) { 
-            console.log('d:', d.nodeType, d.index);
             return d.nodeType == 'nucleotide';
         });
 
@@ -1777,7 +1773,6 @@ export function FornaContainer(element, passedOptions) {
             var gnodes = visNodes.selectAll('g.gnode')
             .data(self.graph.nodes, nodeKey);
             //.attr('pointer-events', 'all');
-            console.log('self.graph.nodes:', self.graph.nodes);
 
             var gnodesEnter = gnodes.enter();
 
@@ -1827,15 +1822,6 @@ export function FornaContainer(element, passedOptions) {
             self.force.on('end', () => {
                 gnodes.selectAll('[node_type=nucleotide]')
                 .filter((d,i) => { if (i == 0) return true; else return false; })
-                .each((d,i) => {
-                    //console.log("pos", d.num, d.x, d.y);
-                });
-
-                for (let uid in self.rnas) {
-                    for (let i = 1; i < self.rnas[uid].pairtable[0]; i++) {
-                        //console.log('pt', i, self.rnas[uid].pairtable[i]);
-                    }
-                }
 
             });
             
