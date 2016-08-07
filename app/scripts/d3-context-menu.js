@@ -3,7 +3,7 @@ import d3 from 'd3';
 
 export function contextMenu(menu, opts) {
     let previouslyMouseUp = false;
-    let clickAway = {};
+    let clickAway = (d) => {};
 
     var openCallback,
         closeCallback;
@@ -31,7 +31,7 @@ export function contextMenu(menu, opts) {
             return;
         }
 
-        clickAway();
+        //clickAway();
         console.log('close2');
         d3.select('.d3-context-menu').style('display', 'none');
         if (closeCallback) {
