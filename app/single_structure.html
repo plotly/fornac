@@ -22,8 +22,13 @@ function normalContainer() {
             {'applyForce': true, 'allowPanningAndZooming': true, 'initialSize':[500,300], 
              'editable': true});
 
+    /*
     let options = {'structure': '..((..((...[)).(((..].))).))..',
         'sequence': 'AACGCUUCAUAUAAUCCUAAUGACCUAUAA'
+    };
+    */
+
+    let options = {'structure': '.(.).&..((..))'
     };
     container.addRNA(options.structure, options);
     container.setSize();

@@ -8,7 +8,7 @@ import d3 from 'd3';
 import slugid from 'slugid';
 import {contextMenu} from './d3-context-menu.js';
 
-import {RNAGraph,moleculesToJson} from './rnagraph.js';
+import {RNAGraph,moleculesToJson,sameRNAStrand} from './rnagraph.js';
 import {simpleXyCoordinates} from './simplernaplot.js';
 import {ColorScheme} from 'rnautils';
 import {NAView} from './naview/naview.js'
@@ -204,6 +204,7 @@ export function FornaContainer(element, passedOptions) {
             if (self.options.layout == 'naview') {
                 var naview = new NAView();
 
+                console.log('rg.pairtable:', rg.pairtable);
                 let naViewPositions = naview.naview_xy_coordinates(rg.pairtable);
                 options.positions = []
                 for (let i = 0; i < naViewPositions.nbase; i++)
@@ -1316,10 +1317,14 @@ export function FornaContainer(element, passedOptions) {
             updateRnaGraph(r);
 
         } else {
-            //Add an extra link
-            console.log('intermolecule');
-            newLink.linkType = 'intermolecule';
-            self.extraLinks.push(newLink);
+            if (newLink == 'basepair') {
+                //Add an extra link
+                console.log('intermolecule');
+                newLink.linkType = 'intermolecule';
+                self.extraLinks.push(newLink);
+            } else if (newLink == 'backbone') {
+                //adding a backbone link so we have to create a new RNAgraph
+            }
         }
         self.recalculateGraph();
         self.update();
@@ -1359,11 +1364,10 @@ export function FornaContainer(element, passedOptions) {
 
                 if (sourceRna.links[i].target == newLink.target)
                     potentialBackbone = false; //the source node is already a source for another backbone
-            }
+            } 
         }
 
         let linkMenu = [];
-        console.log('potentialBackbone');
 
         if (potentialBackbone) {
             // the new link can be either a backbone or basepair link so we
@@ -1374,6 +1378,9 @@ export function FornaContainer(element, passedOptions) {
                     action: function(elm, d, i) {
                         linkContextMenuShown = false;
                         dragLine.attr('class', 'drag_line_hidden');
+                        newLink.linkType = 'backbone';
+
+                        self.addLink(newLink);
                     },
                     disabled: false // optional, defaults to false
                 },
@@ -1434,11 +1441,10 @@ export function FornaContainer(element, passedOptions) {
             if (mouseupNode.nodeType == 'middle' || mousedownNode.nodeType == 'middle' || mouseupNode.nodeType == 'label' || mousedownNode.nodeType == 'label')
                 return;
 
-            if (newLink.source.rna != newLink.target.rna) {
+            if (!sameRNAStrand(node1, node2)) {
                 // could be either a backbone link or an intermolecule link
                 addInterMoleculeLink.bind(this)(newLink,d,i);
             } else {
-
                 newLink.type = 'basepair';
                 self.addLink(newLink);
             }

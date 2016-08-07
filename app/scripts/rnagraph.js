@@ -29,6 +29,27 @@ if(typeof(String.prototype.trim) === 'undefined')
         };
     }
 
+export function sameRNAStrand(node1, node2) {
+    // check if two nodes are in the same RNA strand
+    if (node1.rna != node2.rna)
+        return false;
+
+    let rna = node1.rna;
+    console.log('rna:', rna);
+
+    for (let i = 0; i < rna.dotBracketBreaks.length; i++) {
+        console.log('node1.index:', node1.index, "db.index:", rna.dotBracketBreaks[i], "node2.index", node2.index);
+        if (node1.index < rna.dotBracketBreaks[i]  && 
+            rna.dotBracketBreaks[i] < node2.index)
+            return false;
+    }
+
+    console.log('node1', node1, 'node2', node2);
+    console.log('dotBracket1', node1.rna.dotbracket);
+    console.log('dotBracket2', node2.rna.dotbracket);
+
+    return true;
+}
 
 export function ProteinGraph(structName, size, uid) {
     var self = this;
@@ -166,6 +187,9 @@ export function RNAGraph(seq, dotbracket, structName, startNumber) {
 
     self.addPositions = function(nodeType, positions) {
         var labelNodes = self.nodes.filter(function(d) { return d.nodeType == nodeType; });
+        console.log('positions:', positions.length);
+        console.log('labelNodes:', labelNodes.length);
+        console.log('pt:', self.pairtable.length);
 
         for  (var i = 0; i < labelNodes.length; i++) {
             labelNodes[i].x = positions[i][0];
