@@ -186,7 +186,14 @@ export function RNAGraph(seq, dotbracket, structName, startNumber) {
     self.computePairtable();
 
     self.addPositions = function(nodeType, positions) {
-        var labelNodes = self.nodes.filter(function(d) { return d.nodeType == nodeType; });
+        let labelNodes = null;
+        if (typeof nodeType == 'function')
+            labelNodes = self.nodes.filter(nodeType);
+        else
+            labelNodes = self.nodes.filter(function(d) { return d.nodeType == nodeType; });
+
+        console.log('labelNodes:', labelNodes);
+
         console.log('positions:', positions.length);
         console.log('labelNodes:', labelNodes.length);
         console.log('pt:', self.pairtable.length);
@@ -206,10 +213,12 @@ export function RNAGraph(seq, dotbracket, structName, startNumber) {
         var labelNodes = self.nodes.filter(function(d) { return d.nodeType == 'nucleotide'; });
 
         // if a node was an artifical break node, convert it to a middle
+        /*
         for (var i = 0; i < labelNodes.length; i++) {
             if (self.dotbracket[i] == 'o')
                 labelNodes[i].nodeType = 'middle';
         }
+        */
 
         for (var i = 0; i < self.elements.length; i++) {
             var broken = false;
@@ -515,10 +524,12 @@ export function RNAGraph(seq, dotbracket, structName, startNumber) {
 
         for (var i = 1; i <= pt[0]; i++) {
             var nodeName = self.seq[i-1];
+            let nodeType = 'nucleotide'
 
             if (self.dotBracketBreaks.indexOf(i-1) >= 0 ||
                 self.dotBracketBreaks.indexOf(i-2) >= 0) {
                 nodeName = '';
+                nodeType = 'break-placeholder'
             }
 
             //create a node for each nucleotide
@@ -526,7 +537,7 @@ export function RNAGraph(seq, dotbracket, structName, startNumber) {
                              'num': i + self.startNumberArray[i-1] - 1,
                              'radius': 5,
                              'rna': self,
-                             'nodeType': 'nucleotide',
+                             'nodeType': nodeType,
                              'structName': self.structName,
                              'elemType': elemTypes[i],
                              'uid': generateUUID(),
@@ -817,6 +828,7 @@ export function RNAGraph(seq, dotbracket, structName, startNumber) {
 
     self.recalculateElements = function() {
         self.removePseudoknots();
+        console.log('self.pairtable', self.pairtable);
         self.elements = self.ptToElements(self.pairtable, 0, 1, self.dotbracket.length);
 
         if (self.circular) {

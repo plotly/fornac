@@ -214,9 +214,12 @@ export function FornaContainer(element, passedOptions) {
             }
         }
 
+        // the positions also include the locations of the break-placeholder nodes
+
         rnaJson = rnaJson.elementsToJson()
         .addUids(options.uids)
-        .addPositions('nucleotide', options.positions)
+        .addPositions((d) => { return d.nodeType == 'nucleotide' || d.nodeType == 'break-placeholder'}, 
+                options.positions)
         .addLabels(1, options.labelInterval)
         .reinforceStems()
         .reinforceLoops()
@@ -1237,6 +1240,8 @@ export function FornaContainer(element, passedOptions) {
         var nucleotidePositions = r.getPositions('nucleotide');
         var labelPositions = r.getPositions('label');
 
+        console.log('nucleotidePositions', nucleotidePositions);
+
         var uids = r.getUids();
 
         r.recalculateElements()
@@ -1357,8 +1362,7 @@ export function FornaContainer(element, passedOptions) {
 
         for (let i = 0; i < sourceRna.links.length; i++) {
             if (sourceRna.links[i].linkType == 'backbone') {
-                console.log('sourceRna.links[i].source', sourceRna.links[i].source, 
-                        newLink.source);
+                //console.log('sourceRna.links[i].source', sourceRna.links[i].source, newLink.source);
                 if (sourceRna.links[i].source == newLink.source)
                     potentialBackbone = false; //the source node is already a source for another backbone
 
@@ -1441,7 +1445,7 @@ export function FornaContainer(element, passedOptions) {
             if (mouseupNode.nodeType == 'middle' || mousedownNode.nodeType == 'middle' || mouseupNode.nodeType == 'label' || mousedownNode.nodeType == 'label')
                 return;
 
-            if (!sameRNAStrand(node1, node2)) {
+            if (!sameRNAStrand(newLink.source, newLink.target)) {
                 // could be either a backbone link or an intermolecule link
                 addInterMoleculeLink.bind(this)(newLink,d,i);
             } else {
@@ -1653,6 +1657,7 @@ export function FornaContainer(element, passedOptions) {
         });
 
         var nucleotideNodes = gnodesEnter.filter(function(d) { 
+            console.log('d:', d.nodeType, d.index);
             return d.nodeType == 'nucleotide';
         });
 
@@ -1772,6 +1777,7 @@ export function FornaContainer(element, passedOptions) {
             var gnodes = visNodes.selectAll('g.gnode')
             .data(self.graph.nodes, nodeKey);
             //.attr('pointer-events', 'all');
+            console.log('self.graph.nodes:', self.graph.nodes);
 
             var gnodesEnter = gnodes.enter();
 
