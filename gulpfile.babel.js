@@ -55,15 +55,15 @@ gulp.task('html', ['styles', 'scripts'], () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.debug())
-    .pipe($.if('*.js', $.uglify()))
-    .pipe($.if('*.css', $.cssnano()))
-    .pipe($.if('*.html', $.htmlmin({collapseWhitespace: true})))
+    .pipe($.if('*/*.js', $.uglify()))
+    .pipe($.if('*/*.css', $.cssnano()))
+    .pipe($.if('*/*.html', $.htmlmin({collapseWhitespace: true})))
     .pipe(gulp.dest('dist'));
 });
 
 gulp.task('buildJs', ['styles', 'scripts'], () => {
     return gulp.src(['.tmp/scripts/rnatreemap.js'])
-    .pipe($.uglify())
+    .pipe($.if('*/*.js', $.uglify()))
     .pipe(gulp.dest('dist/scripts'))
 });
 
