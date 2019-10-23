@@ -1,108 +1,107 @@
-.structure-background-rect {
+.forna-container .structure-background-rect {
     stroke: black;
     stroke-width: 5;
     fill: transparent;
 }
 
-circle.rna-base {
+.forna-container circle.rna-base {
   stroke: #ccc;
   stroke-width: 1px;
   opacity: 1;
   fill: white;
 }
 
-circle.rna-base.label {
+.forna-container circle.rna-base.label {
     stroke: transparent;
     stroke-width: 0;
     fill: white;
 }
 
-line.link {
+.forna-container line.link {
   stroke: #999;
   stroke-opacity: 0.8;
   stroke-width: 2;
 }
 
-line.rna-link {
+.forna-container line.rna-link {
   stroke: #999;
   stroke-opacity: 0.8;
   stroke-width: 2;
 }
 
-.overlay {
+.forna-container .overlay {
     fill: transparent;
 }
 
-.rna-name {
+.forna-container .rna-name {
     text-anchor: middle;
     dy: -10;
     font-family: Tahoma, Geneva, sans-serif;
     font-size: 8pt;
 }
 
-line.rna-link[link-type="backbone"] {
+.forna-container line.rna-link[link-type="backbone"] {
     stroke: transparent;
 }
 
-line.rna-link[link-type="basepair"] {
+.forna-container line.rna-link[link-type="basepair"] {
     stroke: transparent;
 }
 
-line.rna-link[link-type="fake"] {
+.forna-container line.rna-link[link-type="fake"] {
     stroke: transparent;
 }
 
-line.rna-link[link-type="extra"] {
+.forna-container line.rna-link[link-type="extra"] {
     stroke: grey;
 }
 
-line.rna-link[extra-link-type="correct"] {
+.forna-container line.rna-link[extra-link-type="correct"] {
     stroke: green;
 }
 
-line.rna-link[extra-link-type="incorrect"] {
+.forna-container line.rna-link[extra-link-type="incorrect"] {
     stroke: green;
 }
 
 
-path {
-    stroke: grey;
-  stroke-width: 2;
+.forna-container path {
+    stroke-width: 2;
 }
 
-path[extra-link-type="correct"] {
+.forna-container path[extra-link-type="correct"] {
     stroke: green;
 }
 
-path[extra-link-type="incorrect"] {
+.forna-container path[extra-link-type="incorrect"] {
     stroke: red;
 }
 
 
-line.basepair {
+.forna-container line.basepair {
   stroke: red;
 }
 
-line.intermolecule {
+.forna-container line.intermolecule {
   stroke: blue;
 }
 
-line.chain_chain {
+.forna-container line.chain_chain {
   stroke-dasharray: 3,3;
 }
 
-line.fake {
+.forna-container line.fake {
   stroke: green;
 }
 
-.transparent {
+.forna-container .transparent {
     fill: transparent;
     stroke-width: 0;
     stroke-opacity: 0;
     opacity: 0;
 }
 
-.d3-tip {
+.forna-container .d3-tip {
     line-height: 1;
     font-weight: bold;
     padding: 6px;
@@ -110,9 +109,9 @@ line.fake {
     color: #fff;
     border-radius: 4px;
     pointer-events: none;
-          }
+}
 
-text.nucleotide-label {
+.forna-container text.nucleotide-label {
     font-size: 5.5pt;
     font-weight: bold;
     font-family: Tahoma, Geneva, sans-serif;
@@ -120,7 +119,7 @@ text.nucleotide-label {
     pointer-events: none;
 }
 
-text.number-label {
+.forna-container text.number-label {
     font-size: 5.5pt;
     font-weight: bold;
     font-family: Tahoma, Geneva, sans-serif;
@@ -128,21 +127,21 @@ text.number-label {
     pointer-events: none;
 }
 
-text {
+.forna-container text {
     pointer-events: none;
 }
 
-g.gnode {
+.forna-container g.gnode {
 
 }
 
-.brush .extent {
+.forna-container .brush .extent {
   fill-opacity: .1;
   stroke: #fff;
   shape-rendering: crispEdges;
 }
 
-.noselect {
+.forna-container .noselect {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
