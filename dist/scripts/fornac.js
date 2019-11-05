@@ -797,7 +797,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _d2.default.select(element).select('svg').remove();
 
-	    var svg = _d2.default.select(element).attr('tabindex', 1).on('keydown.brush', keydown).on('keyup.brush', keyup).each(function () {
+	    var svg = _d2.default.select(element).classed('forna-container', true).attr('tabindex', 1).on('keydown.brush', keydown).on('keyup.brush', keyup).each(function () {
 	        this.focus();
 	    }).append('svg:svg').attr('width', self.options.svgW).attr('height', self.options.svgH).attr('id', 'plotting-area');
 

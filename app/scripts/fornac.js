@@ -800,6 +800,7 @@ export function FornaContainer(element, passedOptions) {
     d3.select(element).select('svg').remove();
 
     var svg = d3.select(element)
+    .classed('forna-container', true)
     .attr('tabindex', 1)
     .on('keydown.brush', keydown)
     .on('keyup.brush', keyup)
