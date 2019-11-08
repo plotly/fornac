@@ -1577,20 +1577,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            gnodes.select('path').each(positionAnyNode);
 	        });
 
-	        self.force.on('end', function () {
-	            gnodes.selectAll('[node_type=nucleotide]').filter(function (d, i) {
-	                if (i == 0) return true;else return false;
-	            }).each(function (d, i) {
-	                console.log("pos", d.num, d.x, d.y);
-	            });
-
-	            for (var uid in self.rnas) {
-	                for (var _i2 = 1; _i2 < self.rnas[uid].pairtable[0]; _i2++) {
-	                    console.log('pt', _i2, self.rnas[uid].pairtable[_i2]);
-	                }
-	            }
-	        });
-
 	        self.changeColorScheme(self.colorScheme);
 
 	        if (self.animation) {
