@@ -33,6 +33,7 @@ export function FornaContainer(element, passedOptions) {
         'layout': 'standard-polygonal',
         'allowPanningAndZooming': true,
         'transitionDuration': 500,
+        'titlePattern': '${structName}:${num}',
         'resizeSvgOnResize': true   //change the size of the svg when resizing the container
                                     //sometimes its beneficial to turn this off, especially when
                                     //performance is an issue
@@ -759,6 +760,10 @@ export function FornaContainer(element, passedOptions) {
             });
         }
     };
+
+    self.setTitlePattern = function(newPattern) {
+        self.options['titlePattern'] = newPattern || '';
+    }
 
     function mousedown() {
 
@@ -1511,7 +1516,7 @@ export function FornaContainer(element, passedOptions) {
         .append('svg:title')
         .text(function(d) {
             if (d.nodeType == 'nucleotide') {
-                return d.structName + ':' + d.num;
+                return self.getGetTitleText(d)
             } else {
                 return '';
             }
@@ -1524,7 +1529,7 @@ export function FornaContainer(element, passedOptions) {
         .append('svg:title')
         .text(function(d) {
             if (d.nodeType == 'nucleotide') {
-                return d.structName + ':' + d.num;
+                return self.getGetTitleText(d)
             } else {
                 return '';
             }
@@ -1549,7 +1554,7 @@ export function FornaContainer(element, passedOptions) {
         labelsEnter.append('svg:title')
         .text(function(d) {
             if (d.nodeType == 'nucleotide') {
-                return d.structName + ':' + d.num;
+                return self.getGetTitleText(d)
             } else {
                 return '';
             }
@@ -1561,13 +1566,11 @@ export function FornaContainer(element, passedOptions) {
 
     var nodeTooltip = function(d) {
         nodeTooltips = {};
-
         nodeTooltips.nucleotide = d.num;
         nodeTooltips.label = '';
         nodeTooltips.pseudo = '';
         nodeTooltips.middle = '';
         nodeTooltips.protein = d.structName;
-
         return nodeTooltips[d.nodeType];
     };
 
@@ -1652,6 +1655,19 @@ export function FornaContainer(element, passedOptions) {
         }
 
         self.updateStyle();
+    };
+
+    self.getGetTitleText = function (d) {
+        var pattern = self.options['titlePattern'] || '';
+        var result = pattern;
+
+        var keys = pattern.split('${').slice(1).map(elem => elem.split('}')[0])
+
+        keys.forEach(key => {
+            var fieldValue = d[key] || '';
+            result = result.replace(`\${${key}}`, fieldValue);
+        });
+        return result;
     };
 
     self.setSize();
