@@ -1458,7 +1458,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return d.radius;
 	        }).append('svg:title').text(function (d) {
 	            if (d.nodeType == 'nucleotide') {
-	                return self.getGetTitleText(d);
+	                return self.getTitleText(d);
 	            } else {
 	                return '';
 	            }
@@ -1470,7 +1470,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return d.num;
 	        }).append('svg:title').text(function (d) {
 	            if (d.nodeType == 'nucleotide') {
-	                return self.getGetTitleText(d);
+	                return self.getTitleText(d);
 	            } else {
 	                return '';
 	            }
@@ -1490,7 +1490,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        labelsEnter.append('svg:title').text(function (d) {
 	            if (d.nodeType == 'nucleotide') {
-	                return self.getGetTitleText(d);
+	                return self.getTitleText(d);
 	            } else {
 	                return '';
 	            }
@@ -1589,7 +1589,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        self.updateStyle();
 	    };
 
-	    self.getGetTitleText = function (d) {
+	    self.getTitleText = function (d) {
 	        var pattern = self.options['titlePattern'] || '';
 	        var result = pattern;
 

@@ -1516,7 +1516,7 @@ export function FornaContainer(element, passedOptions) {
         .append('svg:title')
         .text(function(d) {
             if (d.nodeType == 'nucleotide') {
-                return self.getGetTitleText(d)
+                return self.getTitleText(d)
             } else {
                 return '';
             }
@@ -1529,7 +1529,7 @@ export function FornaContainer(element, passedOptions) {
         .append('svg:title')
         .text(function(d) {
             if (d.nodeType == 'nucleotide') {
-                return self.getGetTitleText(d)
+                return self.getTitleText(d)
             } else {
                 return '';
             }
@@ -1554,7 +1554,7 @@ export function FornaContainer(element, passedOptions) {
         labelsEnter.append('svg:title')
         .text(function(d) {
             if (d.nodeType == 'nucleotide') {
-                return self.getGetTitleText(d)
+                return self.getTitleText(d)
             } else {
                 return '';
             }
@@ -1657,7 +1657,7 @@ export function FornaContainer(element, passedOptions) {
         self.updateStyle();
     };
 
-    self.getGetTitleText = function (d) {
+    self.getTitleText = function (d) {
         var pattern = self.options['titlePattern'] || '';
         var result = pattern;
 
