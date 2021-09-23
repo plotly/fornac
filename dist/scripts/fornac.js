@@ -110,7 +110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        'layout': 'standard-polygonal',
 	        'allowPanningAndZooming': true,
 	        'transitionDuration': 500,
-	        'titlePattern': '${structName}:${num}',
+	        'hoverPattern': '${structName}:${num}',
 	        'resizeSvgOnResize': true //change the size of the svg when resizing the container
 	        //sometimes its beneficial to turn this off, especially when
 	        //performance is an issue
@@ -772,8 +772,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    self.setTitlePattern = function (newPattern) {
-	        self.options['titlePattern'] = newPattern || '';
+	    self.setHoverPattern = function (newPattern) {
+	        self.options['hoverPattern'] = newPattern || '';
 	    };
 
 	    function mousedown() {}
@@ -1590,7 +1590,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    self.getTitleText = function (d) {
-	        var pattern = self.options['titlePattern'] || '';
+	        var pattern = self.options['hoverPattern'] || '';
 	        var result = pattern;
 
 	        var keys = pattern.split('${').slice(1).map(function (elem) {
@@ -1598,7 +1598,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 
 	        keys.forEach(function (key) {
-	            var fieldValue = d[key] || '';
+	            var fieldValue = d[key];
+
+	            if (!fieldValue) {
+	                console.warn('The property ' + key + ' isn\'t correct node property');
+	                fieldValue = '';
+	            }
 	            result = result.replace('${' + key + '}', fieldValue);
 	        });
 	        return result;

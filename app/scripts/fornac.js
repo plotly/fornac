@@ -33,7 +33,7 @@ export function FornaContainer(element, passedOptions) {
         'layout': 'standard-polygonal',
         'allowPanningAndZooming': true,
         'transitionDuration': 500,
-        'titlePattern': '${structName}:${num}',
+        'hoverPattern': '${structName}:${num}',
         'resizeSvgOnResize': true   //change the size of the svg when resizing the container
                                     //sometimes its beneficial to turn this off, especially when
                                     //performance is an issue
@@ -761,8 +761,8 @@ export function FornaContainer(element, passedOptions) {
         }
     };
 
-    self.setTitlePattern = function(newPattern) {
-        self.options['titlePattern'] = newPattern || '';
+    self.setHoverPattern = function(newPattern) {
+        self.options['hoverPattern'] = newPattern || '';
     }
 
     function mousedown() {
@@ -1658,13 +1658,18 @@ export function FornaContainer(element, passedOptions) {
     };
 
     self.getTitleText = function (d) {
-        var pattern = self.options['titlePattern'] || '';
+        var pattern = self.options['hoverPattern'] || '';
         var result = pattern;
 
         var keys = pattern.split('${').slice(1).map(elem => elem.split('}')[0])
 
         keys.forEach(key => {
-            var fieldValue = d[key] || '';
+            var fieldValue = d[key];
+
+            if (!fieldValue) {
+                console.warn(`The property ${key} isn't correct node property`)
+                fieldValue = ''
+            }
             result = result.replace(`\${${key}}`, fieldValue);
         });
         return result;
