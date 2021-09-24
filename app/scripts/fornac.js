@@ -33,7 +33,7 @@ export function FornaContainer(element, passedOptions) {
         'layout': 'standard-polygonal',
         'allowPanningAndZooming': true,
         'transitionDuration': 500,
-        'hoverPattern': '${structName}:${num}',
+        'hoverPattern': '',
         'resizeSvgOnResize': true   //change the size of the svg when resizing the container
                                     //sometimes its beneficial to turn this off, especially when
                                     //performance is an issue
@@ -1658,7 +1658,7 @@ export function FornaContainer(element, passedOptions) {
     };
 
     self.getTitleText = function (d) {
-        var pattern = self.options['hoverPattern'] || '';
+        var pattern = self.getHoverPattern(d)
         var result = pattern;
 
         var keys = pattern.split('${').slice(1).map(elem => elem.split('}')[0])
@@ -1674,6 +1674,13 @@ export function FornaContainer(element, passedOptions) {
         });
         return result;
     };
+
+    self.getHoverPattern = function(d) {
+        var structNameIsPresent = d['structName'] && d['structName'] !== 'empty'
+        var defaultPattern = structNameIsPresent ? '${structName}:${num}' : '${nodeType}:${num}'
+        var patternIsPresent = self.options['hoverPattern'] && self.options['hoverPattern'].length > 0
+        return patternIsPresent ? self.options['hoverPattern'] : defaultPattern;
+    }
 
     self.setSize();
 }
