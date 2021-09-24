@@ -1601,116 +1601,116 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	exports.simpleXyCoordinates = simpleXyCoordinates;
 	function simpleXyCoordinates(pair_table) {
-	  var INIT_ANGLE = 0.; /* initial bending angle */
-	  var INIT_X = 100.; /* coordinate of first digit */
-	  var INIT_Y = 100.; /* see above */
-	  var RADIUS = 15.;
+	    var INIT_ANGLE = 0.; /* initial bending angle */
+	    var INIT_X = 100.; /* coordinate of first digit */
+	    var INIT_Y = 100.; /* see above */
+	    var RADIUS = 15.;
 
-	  var x = [],
-	      y = [];
+	    var x = [],
+	        y = [];
 
-	  var i, len;
-	  var alpha;
+	    var i, len;
+	    var alpha;
 
-	  len = pair_table[0];
-	  var angle = Array.apply(null, new Array(len + 5)).map(Number.prototype.valueOf, 0);
-	  var loop_size = Array.apply(null, new Array(16 + Math.floor(len / 5))).map(Number.prototype.valueOf, 0);
-	  var stack_size = Array.apply(null, new Array(16 + Math.floor(len / 5))).map(Number.prototype.valueOf, 0);
+	    len = pair_table[0];
+	    var angle = Array.apply(null, new Array(len + 5)).map(Number.prototype.valueOf, 0);
+	    var loop_size = Array.apply(null, new Array(16 + Math.floor(len / 5))).map(Number.prototype.valueOf, 0);
+	    var stack_size = Array.apply(null, new Array(16 + Math.floor(len / 5))).map(Number.prototype.valueOf, 0);
 
-	  var lp = 0;
-	  var stk = 0;
-	  var PIHALF = Math.PI / 2;
+	    var lp = 0;
+	    var stk = 0;
+	    var PIHALF = Math.PI / 2;
 
-	  var loop = function loop(i, j, pair_table)
-	  /* i, j are the positions AFTER the last pair of a stack; i.e
-	     i-1 and j+1 are paired. */
-	  {
-	    var count = 2; /* counts the VERTICES of a loop polygon; that's
-	                      NOT necessarily the number of unpaired bases!
-	                      Upon entry the loop has already 2 vertices, namely
-	                      the pair i-1/j+1.  */
+	    var loop = function loop(i, j, pair_table)
+	    /* i, j are the positions AFTER the last pair of a stack; i.e
+	       i-1 and j+1 are paired. */
+	    {
+	        var count = 2; /* counts the VERTICES of a loop polygon; that's
+	                          NOT necessarily the number of unpaired bases!
+	                          Upon entry the loop has already 2 vertices, namely
+	                          the pair i-1/j+1.  */
 
-	    var r = 0,
-	        bubble = 0; /* bubble counts the unpaired digits in loops */
+	        var r = 0,
+	            bubble = 0; /* bubble counts the unpaired digits in loops */
 
-	    var i_old, partner, k, l, start_k, start_l, fill, ladder;
-	    var begin, v, diff;
-	    var polygon;
+	        var i_old, partner, k, l, start_k, start_l, fill, ladder;
+	        var begin, v, diff;
+	        var polygon;
 
-	    var remember = Array.apply(null, new Array(3 + Math.floor((j - i) / 5) * 2)).map(Number.prototype.valueOf, 0);
+	        var remember = Array.apply(null, new Array(3 + Math.floor((j - i) / 5) * 2)).map(Number.prototype.valueOf, 0);
 
-	    i_old = i - 1, j++; /* j has now been set to the partner of the
-	                           previous pair for correct while-loop
-	                           termination.  */
-	    while (i != j) {
-	      partner = pair_table[i];
-	      if (!partner || i == 0) i++, count++, bubble++;else {
-	        count += 2;
-	        k = i, l = partner; /* beginning of stack */
-	        remember[++r] = k;
-	        remember[++r] = l;
-	        i = partner + 1; /* next i for the current loop */
+	        i_old = i - 1, j++; /* j has now been set to the partner of the
+	                               previous pair for correct while-loop
+	                               termination.  */
+	        while (i != j) {
+	            partner = pair_table[i];
+	            if (!partner || i == 0) i++, count++, bubble++;else {
+	                count += 2;
+	                k = i, l = partner; /* beginning of stack */
+	                remember[++r] = k;
+	                remember[++r] = l;
+	                i = partner + 1; /* next i for the current loop */
 
-	        start_k = k, start_l = l;
-	        ladder = 0;
-	        do {
-	          k++, l--, ladder++; /* go along the stack region */
-	        } while (pair_table[k] == l && pair_table[k] > k);
+	                start_k = k, start_l = l;
+	                ladder = 0;
+	                do {
+	                    k++, l--, ladder++; /* go along the stack region */
+	                } while (pair_table[k] == l && pair_table[k] > k);
 
-	        fill = ladder - 2;
-	        if (ladder >= 2) {
-	          angle[start_k + 1 + fill] += PIHALF; /*  Loop entries and    */
-	          angle[start_l - 1 - fill] += PIHALF; /*  exits get an        */
-	          angle[start_k] += PIHALF; /*  additional PI/2.    */
-	          angle[start_l] += PIHALF; /*  Why ? (exercise)    */
-	          if (ladder > 2) {
-	            for (; fill >= 1; fill--) {
-	              angle[start_k + fill] = Math.PI; /*  fill in the angles  */
-	              angle[start_l - fill] = Math.PI; /*  for the backbone    */
+	                fill = ladder - 2;
+	                if (ladder >= 2) {
+	                    angle[start_k + 1 + fill] += PIHALF; /*  Loop entries and    */
+	                    angle[start_l - 1 - fill] += PIHALF; /*  exits get an        */
+	                    angle[start_k] += PIHALF; /*  additional PI/2.    */
+	                    angle[start_l] += PIHALF; /*  Why ? (exercise)    */
+	                    if (ladder > 2) {
+	                        for (; fill >= 1; fill--) {
+	                            angle[start_k + fill] = Math.PI; /*  fill in the angles  */
+	                            angle[start_l - fill] = Math.PI; /*  for the backbone    */
+	                        }
+	                    }
+	                }
+	                stack_size[++stk] = ladder;
+	                if (k <= l) loop(k, l, pair_table);
 	            }
-	          }
 	        }
-	        stack_size[++stk] = ladder;
-	        if (k <= l) loop(k, l, pair_table);
-	      }
+
+	        polygon = Math.PI * (count - 2) / count; /* bending angle in loop polygon */
+	        remember[++r] = j;
+	        begin = i_old < 0 ? 0 : i_old;
+	        for (v = 1; v <= r; v++) {
+	            diff = remember[v] - begin;
+	            for (fill = 0; fill <= diff; fill++) {
+	                angle[begin + fill] += polygon;
+	            }if (v > r) break;
+	            begin = remember[++v];
+	        }
+	        loop_size[++lp] = bubble;
+	    };
+
+	    loop(0, len + 1, pair_table);
+	    loop_size[lp] -= 2; /* correct for cheating with function loop */
+
+	    alpha = INIT_ANGLE;
+	    x[0] = INIT_X;
+	    y[0] = INIT_Y;
+
+	    var poss = [];
+
+	    poss.push([x[0], y[0]]);
+	    for (i = 1; i < len; i++) {
+	        x[i] = x[i - 1] + RADIUS * Math.cos(alpha);
+	        y[i] = y[i - 1] + RADIUS * Math.sin(alpha);
+
+	        poss.push([x[i], y[i]]);
+	        alpha += Math.PI - angle[i + 1];
 	    }
 
-	    polygon = Math.PI * (count - 2) / count; /* bending angle in loop polygon */
-	    remember[++r] = j;
-	    begin = i_old < 0 ? 0 : i_old;
-	    for (v = 1; v <= r; v++) {
-	      diff = remember[v] - begin;
-	      for (fill = 0; fill <= diff; fill++) {
-	        angle[begin + fill] += polygon;
-	      }if (v > r) break;
-	      begin = remember[++v];
-	    }
-	    loop_size[++lp] = bubble;
-	  };
-
-	  loop(0, len + 1, pair_table);
-	  loop_size[lp] -= 2; /* correct for cheating with function loop */
-
-	  alpha = INIT_ANGLE;
-	  x[0] = INIT_X;
-	  y[0] = INIT_Y;
-
-	  var poss = [];
-
-	  poss.push([x[0], y[0]]);
-	  for (i = 1; i < len; i++) {
-	    x[i] = x[i - 1] + RADIUS * Math.cos(alpha);
-	    y[i] = y[i - 1] + RADIUS * Math.sin(alpha);
-
-	    poss.push([x[i], y[i]]);
-	    alpha += Math.PI - angle[i + 1];
-	  }
-
-	  return poss;
+	    return poss;
 	}
 
 /***/ }),
@@ -3158,7 +3158,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".forna-container .structure-background-rect {\r\n    stroke: black;\r\n    stroke-width: 5;\r\n    fill: transparent;\r\n}\r\n\r\n.forna-container circle.rna-base {\r\n  stroke: #ccc;\r\n  stroke-width: 1px;\r\n  opacity: 1;\r\n  fill: white;\r\n}\r\n\r\n.forna-container circle.rna-base.label {\r\n    stroke: transparent;\r\n    stroke-width: 0;\r\n    fill: white;\r\n}\r\n\r\n.forna-container line.link {\r\n  stroke: #999;\r\n  stroke-opacity: 0.8;\r\n  stroke-width: 2;\r\n}\r\n\r\n.forna-container line.rna-link {\r\n  stroke: #999;\r\n  stroke-opacity: 0.8;\r\n  stroke-width: 2;\r\n}\r\n\r\n.forna-container .overlay {\r\n    fill: transparent;\r\n}\r\n\r\n.forna-container .rna-name {\r\n    text-anchor: middle;\r\n    dy: -10;\r\n    font-family: Tahoma, Geneva, sans-serif;\r\n    font-size: 8pt;\r\n}\r\n\r\n.forna-container line.rna-link[link-type=\"backbone\"] {\r\n    stroke: transparent;\r\n}\r\n\r\n.forna-container line.rna-link[link-type=\"basepair\"] {\r\n    stroke: transparent;\r\n}\r\n\r\n.forna-container line.rna-link[link-type=\"fake\"] {\r\n    stroke: transparent;\r\n}\r\n\r\n.forna-container line.rna-link[link-type=\"extra\"] {\r\n    stroke: grey;\r\n}\r\n\r\n.forna-container line.rna-link[extra-link-type=\"correct\"] {\r\n    stroke: green;\r\n}\r\n\r\n.forna-container line.rna-link[extra-link-type=\"incorrect\"] {\r\n    stroke: green;\r\n}\r\n\r\n\r\n.forna-container path {\r\n    stroke-width: 2;\r\n}\r\n\r\n.forna-container path[extra-link-type=\"correct\"] {\r\n    stroke: green;\r\n}\r\n\r\n.forna-container path[extra-link-type=\"incorrect\"] {\r\n    stroke: red;\r\n}\r\n\r\n\r\n.forna-container line.basepair {\r\n  stroke: red;\r\n}\r\n\r\n.forna-container line.intermolecule {\r\n  stroke: blue;\r\n}\r\n\r\n.forna-container line.chain_chain {\r\n  stroke-dasharray: 3,3;\r\n}\r\n\r\n.forna-container line.fake {\r\n  stroke: green;\r\n}\r\n\r\n.forna-container .transparent {\r\n    fill: transparent;\r\n    stroke-width: 0;\r\n    stroke-opacity: 0;\r\n    opacity: 0;\r\n}\r\n\r\n.forna-container .d3-tip {\r\n    line-height: 1;\r\n    font-weight: bold;\r\n    padding: 6px;\r\n    background: rgba(0, 0, 0, 0.6);\r\n    color: #fff;\r\n    border-radius: 4px;\r\n    pointer-events: none;\r\n}\r\n\r\n.forna-container text.nucleotide-label {\r\n    font-size: 5.5pt;\r\n    font-weight: bold;\r\n    font-family: Tahoma, Geneva, sans-serif;\r\n    color: rgb(100,100,100);\r\n    pointer-events: none;\r\n}\r\n\r\n.forna-container text.number-label {\r\n    font-size: 5.5pt;\r\n    font-weight: bold;\r\n    font-family: Tahoma, Geneva, sans-serif;\r\n    color: rgb(100,100,100);\r\n    pointer-events: none;\r\n}\r\n\r\n.forna-container text {\r\n    pointer-events: none;\r\n}\r\n\r\n.forna-container g.gnode {\r\n\r\n}\r\n\r\n.forna-container .brush .extent {\r\n  fill-opacity: .1;\r\n  stroke: #fff;\r\n  shape-rendering: crispEdges;\r\n}\r\n\r\n.forna-container .noselect {\r\n    -webkit-touch-callout: none;\r\n    -webkit-user-select: none;\r\n    -khtml-user-select: none;\r\n    -moz-user-select: none;\r\n    -ms-user-select: none;\r\n    user-select: none;\r\n}\r\n", ""]);
+	exports.push([module.id, ".forna-container .structure-background-rect {\n    stroke: black;\n    stroke-width: 5;\n    fill: transparent;\n}\n\n.forna-container circle.rna-base {\n  stroke: #ccc;\n  stroke-width: 1px;\n  opacity: 1;\n  fill: white;\n}\n\n.forna-container circle.rna-base.label {\n    stroke: transparent;\n    stroke-width: 0;\n    fill: white;\n}\n\n.forna-container line.link {\n  stroke: #999;\n  stroke-opacity: 0.8;\n  stroke-width: 2;\n}\n\n.forna-container line.rna-link {\n  stroke: #999;\n  stroke-opacity: 0.8;\n  stroke-width: 2;\n}\n\n.forna-container .overlay {\n    fill: transparent;\n}\n\n.forna-container .rna-name {\n    text-anchor: middle;\n    dy: -10;\n    font-family: Tahoma, Geneva, sans-serif;\n    font-size: 8pt;\n}\n\n.forna-container line.rna-link[link-type=\"backbone\"] {\n    stroke: transparent;\n}\n\n.forna-container line.rna-link[link-type=\"basepair\"] {\n    stroke: transparent;\n}\n\n.forna-container line.rna-link[link-type=\"fake\"] {\n    stroke: transparent;\n}\n\n.forna-container line.rna-link[link-type=\"extra\"] {\n    stroke: grey;\n}\n\n.forna-container line.rna-link[extra-link-type=\"correct\"] {\n    stroke: green;\n}\n\n.forna-container line.rna-link[extra-link-type=\"incorrect\"] {\n    stroke: green;\n}\n\n\n.forna-container path {\n    stroke-width: 2;\n}\n\n.forna-container path[extra-link-type=\"correct\"] {\n    stroke: green;\n}\n\n.forna-container path[extra-link-type=\"incorrect\"] {\n    stroke: red;\n}\n\n\n.forna-container line.basepair {\n  stroke: red;\n}\n\n.forna-container line.intermolecule {\n  stroke: blue;\n}\n\n.forna-container line.chain_chain {\n  stroke-dasharray: 3,3;\n}\n\n.forna-container line.fake {\n  stroke: green;\n}\n\n.forna-container .transparent {\n    fill: transparent;\n    stroke-width: 0;\n    stroke-opacity: 0;\n    opacity: 0;\n}\n\n.forna-container .d3-tip {\n    line-height: 1;\n    font-weight: bold;\n    padding: 6px;\n    background: rgba(0, 0, 0, 0.6);\n    color: #fff;\n    border-radius: 4px;\n    pointer-events: none;\n}\n\n.forna-container text.nucleotide-label {\n    font-size: 5.5pt;\n    font-weight: bold;\n    font-family: Tahoma, Geneva, sans-serif;\n    color: rgb(100,100,100);\n    pointer-events: none;\n}\n\n.forna-container text.number-label {\n    font-size: 5.5pt;\n    font-weight: bold;\n    font-family: Tahoma, Geneva, sans-serif;\n    color: rgb(100,100,100);\n    pointer-events: none;\n}\n\n.forna-container text {\n    pointer-events: none;\n}\n\n.forna-container g.gnode {\n\n}\n\n.forna-container .brush .extent {\n  fill-opacity: .1;\n  stroke: #fff;\n  shape-rendering: crispEdges;\n}\n\n.forna-container .noselect {\n    -webkit-touch-callout: none;\n    -webkit-user-select: none;\n    -khtml-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n}\n", ""]);
 
 	// exports
 
